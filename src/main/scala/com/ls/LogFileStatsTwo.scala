@@ -11,11 +11,11 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
 import org.apache.hadoop.mapreduce.{Job, Mapper, Reducer}
 import scala.collection.JavaConverters.*
 
-class LogFileStatsOne
+class LogFileStatsTwo
 
-object LogFileStatsOne{
+object LogFileStatsTwo{
 
-  class FirstMapper extends Mapper[Object, Text, Text, Text] {
+  class SecondMapper extends Mapper[Object, Text, Text, Text] {
 
     val word = new Text()
 
@@ -27,24 +27,27 @@ object LogFileStatsOne{
       val lines = value.toString.split(System.getProperty("line.separator"))
       lines.map(line => {
         val numPattern = "([a-c][e-g][0-3]|[A-Z][5-9][f-w]){5,15}".r
-        val pattern = numPattern.findFirstIn(line)
-        pattern match{
-          case Some(regexpattern) =>{
-            val words = line.split(' ')
-            val time = format.parse(words(0))
-            val correctInterval = intervals.find(intervals =>  time.compareTo(intervals._1) >= 0 && intervals._2.compareTo(time) >= 0).get
-            word.set(correctInterval._2.toString+" "+words(2))
-            val output = Text(line)
-            context.write(word,output)
+        val words = line.split(' ')
+        if(words(2) == "INFO") {
+          val pattern = numPattern.findFirstIn(line)
+          pattern match {
+            case Some(regexpattern) => {
+              val words = line.split(' ')
+              val time = format.parse(words(0))
+              val correctInterval = intervals.find(intervals => time.compareTo(intervals._1) >= 0 && intervals._2.compareTo(time) >= 0).get
+              word.set(correctInterval._2.toString)
+              val output = Text(line)
+              context.write(word, output)
+            }
+            case None => None
           }
-          case None => None
         }
       })
     }
   }
 
 
-  class FirstReducer extends Reducer[Text, Text, Text, IntWritable] {
+  class SecondReducer extends Reducer[Text, Text, Text, IntWritable] {
     override def reduce(key: Text, values: Iterable[Text], context: Reducer[Text, Text, Text, IntWritable]#Context): Unit = {
       val sum = values.asScala.size
       context.write(key, new IntWritable(sum))

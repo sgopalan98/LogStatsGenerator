@@ -11,15 +11,15 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
 import org.apache.hadoop.mapreduce.{Job, Mapper, Reducer}
 import scala.collection.JavaConverters.*
 
-class LogFileStatsOne
+class LogFileStatsFour
 
-object LogFileStatsOne{
+object LogFileStatsFour{
 
-  class FirstMapper extends Mapper[Object, Text, Text, Text] {
+  class FourthMapper extends Mapper[Object, Text, Text, IntWritable] {
 
     val word = new Text()
 
-    override def map(key: Object, value: Text, context: Mapper[Object, Text, Text, Text]#Context): Unit = {
+    override def map(key: Object, value: Text, context: Mapper[Object, Text, Text, IntWritable]#Context): Unit = {
       val format = new java.text.SimpleDateFormat("HH:mm:ss.SSS")
       val intervals = Seq((format.parse("22:13:49.612"),format.parse("22:13:50.686")),
         (format.parse("22:13:50.686"), format.parse("22:17:54.674")),
@@ -31,11 +31,17 @@ object LogFileStatsOne{
         pattern match{
           case Some(regexpattern) =>{
             val words = line.split(' ')
-            val time = format.parse(words(0))
-            val correctInterval = intervals.find(intervals =>  time.compareTo(intervals._1) >= 0 && intervals._2.compareTo(time) >= 0).get
-            word.set(correctInterval._2.toString+" "+words(2))
-            val output = Text(line)
-            context.write(word,output)
+            word.set(words(2))
+            if(words(2) == "INFO" || words(2) == "WARN") {
+              val logMessage: String = words(6)
+              val output = IntWritable(logMessage.length())
+              context.write(word, output)
+            }
+            else{
+              val logMessage: String = words(5)
+              val output = IntWritable(logMessage.length())
+              context.write(word, output)
+            }
           }
           case None => None
         }
@@ -44,10 +50,14 @@ object LogFileStatsOne{
   }
 
 
-  class FirstReducer extends Reducer[Text, Text, Text, IntWritable] {
-    override def reduce(key: Text, values: Iterable[Text], context: Reducer[Text, Text, Text, IntWritable]#Context): Unit = {
-      val sum = values.asScala.size
-      context.write(key, new IntWritable(sum))
+  class FourthReducer extends Reducer[Text, IntWritable, Text, IntWritable] {
+    override def reduce(key: Text, values: Iterable[IntWritable], context: Reducer[Text, IntWritable, Text, IntWritable]#Context): Unit = {
+      val valuesList: List[Int] = values.asScala.map(value => {
+        println(s"The values for ${key} are ${value.get}")
+        value.get
+      }).toList
+      val maxValue = valuesList.max
+      context.write(key, new IntWritable(maxValue))
     }
   }
 
