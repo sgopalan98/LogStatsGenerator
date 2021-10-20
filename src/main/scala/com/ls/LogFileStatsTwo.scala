@@ -54,4 +54,24 @@ object LogFileStatsTwo{
     }
   }
 
+  class SecondJobMapper extends Mapper[Object, Text, IntWritable, Text] {
+
+    override def map(key: Object, value: Text, context: Mapper[Object, Text, IntWritable, Text]#Context): Unit = {
+      val lines = value.toString.split(System.lineSeparator())
+      lines.map(line => {
+        val k = line.split(',')(1).toInt
+        val v = line.split(',')(0)
+        context.write(new IntWritable(k), new Text(v))
+      })
+    }
+  }
+
+  class SecondJobReducer extends Reducer[IntWritable, Text, Text, IntWritable] {
+    override def reduce(key: IntWritable, values: Iterable[Text], context: Reducer[IntWritable, Text, Text, IntWritable]#Context): Unit = {
+      val text = values.asScala.map(value => value.toString).toSeq.head
+      context.write(new Text(text), key)
+    }
+  }
+
+
 }

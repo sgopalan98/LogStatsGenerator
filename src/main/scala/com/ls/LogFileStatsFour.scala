@@ -20,10 +20,6 @@ object LogFileStatsFour{
     val word = new Text()
 
     override def map(key: Object, value: Text, context: Mapper[Object, Text, Text, IntWritable]#Context): Unit = {
-      val format = new java.text.SimpleDateFormat("HH:mm:ss.SSS")
-      val intervals = Seq((format.parse("22:13:49.612"),format.parse("22:13:50.686")),
-        (format.parse("22:13:50.686"), format.parse("22:17:54.674")),
-        (format.parse("22:17:54.674"), format.parse("22:17:56.043")))
       val lines = value.toString.split(System.getProperty("line.separator"))
       lines.map(line => {
         val numPattern = "([a-c][e-g][0-3]|[A-Z][5-9][f-w]){5,15}".r
@@ -53,7 +49,6 @@ object LogFileStatsFour{
   class FourthReducer extends Reducer[Text, IntWritable, Text, IntWritable] {
     override def reduce(key: Text, values: Iterable[IntWritable], context: Reducer[Text, IntWritable, Text, IntWritable]#Context): Unit = {
       val valuesList: List[Int] = values.asScala.map(value => {
-        println(s"The values for ${key} are ${value.get}")
         value.get
       }).toList
       val maxValue = valuesList.max
