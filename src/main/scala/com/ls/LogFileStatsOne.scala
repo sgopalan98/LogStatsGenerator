@@ -10,6 +10,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
 import org.apache.hadoop.mapreduce.{Job, Mapper, Reducer}
 import scala.collection.JavaConverters.*
+import com.ls.HelperUtils.Parameters
 
 class LogFileStatsOne
 
@@ -20,13 +21,13 @@ object LogFileStatsOne{
     val word = new Text()
 
     override def map(key: Object, value: Text, context: Mapper[Object, Text, Text, Text]#Context): Unit = {
-      val format = new java.text.SimpleDateFormat("HH:mm:ss.SSS")
-      val intervals = Seq((format.parse("22:13:49.612"),format.parse("22:13:50.686")),
-        (format.parse("22:13:50.686"), format.parse("22:17:54.674")),
-        (format.parse("22:17:54.674"), format.parse("22:17:56.043")))
-      val lines = value.toString.split(System.getProperty("line.separator"))
+      val format = new java.text.SimpleDateFormat(Parameters.dateFormat)
+      val intervals = Seq((format.parse(Parameters.interval1Start),format.parse(Parameters.interval1End)),
+        (format.parse(Parameters.interval2Start), format.parse(Parameters.interval2End)),
+        (format.parse(Parameters.interval3Start), format.parse(Parameters.interval2End)))
+      val lines = value.toString.split(System.getProperty(Parameters.javaLineSeparator))
       lines.map(line => {
-        val numPattern = "([a-c][e-g][0-3]|[A-Z][5-9][f-w]){5,15}".r
+        val numPattern = Parameters.regexString.r
         val pattern = numPattern.findFirstIn(line)
         pattern match{
           case Some(regexpattern) =>{

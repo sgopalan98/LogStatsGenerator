@@ -10,6 +10,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
 import org.apache.hadoop.mapreduce.{Job, Mapper, Reducer}
 import scala.collection.JavaConverters.*
+import com.ls.HelperUtils.Parameters
 
 class LogFileStatsThree
 
@@ -20,9 +21,9 @@ object LogFileStatsThree{
     val word = new Text()
 
     override def map(key: Object, value: Text, context: Mapper[Object, Text, Text, Text]#Context): Unit = {
-      val lines = value.toString.split(System.getProperty("line.separator"))
+      val lines = value.toString.split(System.getProperty(Parameters.javaLineSeparator))
       lines.map(line => {
-        val numPattern = "([a-c][e-g][0-3]|[A-Z][5-9][f-w]){5,15}".r
+        val numPattern = Parameters.regexString.r
         val pattern = numPattern.findFirstIn(line)
         pattern match{
           case Some(regexpattern) =>{
