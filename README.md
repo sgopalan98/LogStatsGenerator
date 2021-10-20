@@ -73,7 +73,7 @@ hdfs dfs -put %LOGFILENAME% /user/root/Input/
 9. Start the map-reduce job by mentioning the input, output and the job number in this format.
 
 ```
-hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ Job1
+hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ 1
 ```
 
 ### Output and explanation of MapReduce jobs
@@ -81,7 +81,7 @@ hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/ro
 ### Task 1: Produce a CSV of distribution of LOG type messages in all predefined intervals.
 
 ```
-hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ Job1
+hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ 1
 ```
 
 ```
@@ -99,7 +99,7 @@ hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/ro
 ### Task 2: Produce a CSV that contains the sorted interval range in terms of no of ERROR messages with the injected Regex pattern.
 
 ```
-hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ Job2
+hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ 2
 ```
 
 ```
@@ -119,7 +119,7 @@ hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/ro
 ### Task 3: Produce a CSV of distribution of LOG type messages.
 
 ```
-hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ Job3
+hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ 3
 ```
 ```
 
@@ -135,7 +135,7 @@ hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/ro
 ### Task 4: Produce a CSV of distribution of LOG type messages in all predefined intervals.
 
 ```
-hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ Job4
+hadoop jar LogFileStats-assembly-0.1.jar /user/root/Input/%LOGFILENAME% /user/root/Output/ 4
 ```
 ```
 
