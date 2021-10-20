@@ -77,7 +77,6 @@ object Parameters:
 
   import scala.concurrent.duration.*
 
-
   val lineSeperatorKey = getParam("LineSeperatorKey","mapred.textoutputformat.separator")
 
   val lineSeparatorValue = getParam("LineSeperatorValue",",")
@@ -95,7 +94,7 @@ object Parameters:
   val intermediateFile = getParam("IntermediateFile", "intermediate.csv")
 
   val dateFormat = getParam("DateFormat", "HH:mm:ss.SSS")
-
+  //Intervals
   val interval1Start = getParam("Interval1Start", "22:13:49.612")
   val interval2Start = getParam("Interval2Start", "22:13:50.686")
   val interval3Start = getParam("Interval3Start", "22:17:54.674")
@@ -108,7 +107,7 @@ object Parameters:
   val javaLineSeparator = getParam("JavaLineSeparator","line.separator")
 
   val regexString = getParam("Regex", "([a-c][e-g][0-3]|[A-Z][5-9][f-w]){5,15}")
-
+  //Log types' values
   val INFO = getParam("INFO", "INFO")
   val DEBUG = getParam("DEBUG", "DEBUG")
   val ERROR = getParam("ERROR", "ERROR")
