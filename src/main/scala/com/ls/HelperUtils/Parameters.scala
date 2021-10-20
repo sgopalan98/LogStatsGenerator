@@ -77,88 +77,38 @@ object Parameters:
 
   import scala.concurrent.duration.*
 
-  private val MINSTRINGLENGTH = 10
-  private val minStrLen = getParam("MinString", MINSTRINGLENGTH)
 
-  //these vals are the public interface of this object, so that its
-  //clients can obtain typed config parameter values
-  val minStringLength: Int = if minStrLen < MINSTRINGLENGTH then
-    logger.warn(s"Min string length is set to $MINSTRINGLENGTH")
-    MINSTRINGLENGTH
-  else minStrLen
-  val maxStringLength = getParam("MaxString", 50)
-  val minSymbol = getParam("MinSymbol", 32)
-  val maxSymbol = getParam("MaxSymbol", 126)
-  val generatingPattern = getParam("Pattern", "([a-c][e-g][0-3]|[A-Z][5-9][f-w]){5,15}")
-  val patternFrequency = getParam("Frequency", 0.05d)
-  val randomSeed = getParam("Seed", System.currentTimeMillis())
-  val timePeriod = getParam("TimePeriod", 1000)
-  val maxCount = getParam("MaxCount", 0)
-  val runDurationInMinutes: Duration = if Parameters.maxCount > 0 then Duration.Inf else getParam("DurationMinutes", 0).minutes
-
-  if Parameters.maxCount > 0 then logger.warn(s"Max count ${Parameters.maxCount} is used to create records instead of timeouts")
-  if timePeriod < 0 then throw new IllegalArgumentException("Timer period cannot be less than zero")
-
-  //it is important to determine if likelihood ranges are not nested, otherwise
-  //it would be difficult to make sense of the types of the generated log messages
-  //if two types of messages have the same likehood of being generated, then this
-  //likelihood conflict should be resolved. It can be, but then clients would have
-  //hard time understanding why certain types of messages may appear more than other
-  //types of messages, if it comes to that. It is better to inform the client about the overlap.
-  private def checkForNestedRanges(input: ListMap[Tuple2[Double, Double], _]): Boolean =
-    val overlaps = for {
-      range1 <- input.keySet
-      range2 <- input.keySet
-      if (range1._1 >= range2._1 && range1._2 <= range2._2 && range1 != range2)
-    } yield (range1, range2)
-    if overlaps.toList.length > 0 then
-      logger.error(s"Ranges of likelihoods overlap: $overlaps")
-      true
-    else
-      false
-  end checkForNestedRanges
-
-  private val compFunc: (Tuple2[Double, Double], Tuple2[Double, Double]) => Boolean = (input1, input2) => (input1._1 <= input2._1) && (input1._2 < input2._2)
-  val logRanges = ListMap(Map[Tuple2[Double, Double], String => Unit](
-    getParam("info", (0.3d, 1d)) -> logger.info,
-    getParam("error", (0d, 0.05d)) -> logger.error,
-    getParam("warn", (0.05d, 0.15d)) -> logger.warn,
-    getParam("debug", (0.15d, 0.3d)) -> logger.debug
-  ).toSeq.sortWith((i1, i2) => compFunc(i1._1, i2._1)): _*)
-  if checkForNestedRanges(logRanges) then throw new Exception("Overrlapping likelihood ranges will lead to the loss of precision.")
-  
-  
   val lineSeperatorKey = getParam("LineSeperatorKey","mapred.textoutputformat.separator")
-  
+
   val lineSeparatorValue = getParam("LineSeperatorValue",",")
-  
+
   val job0Name = getParam("Job0Name","Job0 - Distribution across time intervals")
-  
+
   val job1Name = getParam("Job1Name","Job1 - Compute the time interval count")
 
   val job1Part2Name = getParam("Job1Name","Job1 - Sort the time intervals")
-  
+
   val job2Name = getParam("Job2Name","Job 2 - Distrubution of log messages")
-  
+
   val job3Name = getParam("Job3Name", "JOb3 - Compute maximum length in each log type")
-  
+
   val intermediateFile = getParam("IntermediateFile", "intermediate.csv")
-  
+
   val dateFormat = getParam("DateFormat", "HH:mm:ss.SSS")
-  
+
   val interval1Start = getParam("Interval1Start", "22:13:49.612")
   val interval2Start = getParam("Interval2Start", "22:13:50.686")
   val interval3Start = getParam("Interval3Start", "22:17:54.674")
-  
+
   val interval1End = getParam("Interval1End", "22:13:50.686")
   val interval2End = getParam("Interval2End", "22:17:54.674")
   val interval3End = getParam("Interval3End", "22:17:56.043")
-  
-  
+
+
   val javaLineSeparator = getParam("JavaLineSeparator","line.separator")
-  
+
   val regexString = getParam("Regex", "([a-c][e-g][0-3]|[A-Z][5-9][f-w]){5,15}")
-  
+
   val INFO = getParam("INFO", "INFO")
   val DEBUG = getParam("DEBUG", "DEBUG")
   val ERROR = getParam("ERROR", "ERROR")
