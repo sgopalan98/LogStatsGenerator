@@ -1,4 +1,10 @@
-## CS441 - CS 441 - Engineering Distributed Objects for Cloud Computing
+## Santhanagopalan Krishnamoorthy
+
+---
+
+## CS 441 - Engineering Distributed Objects for Cloud Computing
+
+---
 
 ## Homework 2 - Map Reduce jobs to calculate statistics for Log file
 
@@ -31,10 +37,10 @@ The project was developed using the following environment:
 
 1. Clone [LogFileGenerator](https://github.com/0x1DOCD00D/LogFileGenerator) and run the sbt tasks.
 ```
-sbt tests run
+sbt test run
 ```
 2. Clone this repository
-3. Define the predefined intervals in the configuration in the repository with values from the log file generated.
+3. Define the predefined intervals in the configuration in the repository with values from the log file generated. (Or use the sample log provided in resources/LogFileGenerator.2021-10-15.log, for which the intervals are predefined in resources/application.conf)
 4. Generate the fat jar file using SBT on shell / cmd
 
 ```

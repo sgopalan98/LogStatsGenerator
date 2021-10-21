@@ -26,7 +26,7 @@ object LogFileStatsOne{
       //Getting the predefined intervals
       val intervals = Seq((format.parse(Parameters.interval1Start),format.parse(Parameters.interval1End)),
         (format.parse(Parameters.interval2Start), format.parse(Parameters.interval2End)),
-        (format.parse(Parameters.interval3Start), format.parse(Parameters.interval2End)))
+        (format.parse(Parameters.interval3Start), format.parse(Parameters.interval3End)))
       //Splitting the String into lines
       val lines = value.toString.split(System.getProperty(Parameters.javaLineSeparator))
       lines.map(line => {
