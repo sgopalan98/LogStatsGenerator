@@ -1,9 +1,13 @@
 package com.ls
 
-import com.ls.LogFileStatsFour.{FourthMapper, FourthReducer}
-import com.ls.LogFileStatsOne.{FirstMapper, FirstReducer}
-import com.ls.LogFileStatsThree.{ThirdMapper, ThirdReducer}
-import com.ls.LogFileStatsTwo.{SecondJobMapper, SecondJobReducer, SecondMapper, SecondReducer}
+import com.ls.MapReduceJobs.LogFileStatsOne
+import com.ls.MapReduceJobs.LogFileStatsTwo
+import com.ls.MapReduceJobs.LogFileStatsThree
+import com.ls.MapReduceJobs.LogFileStatsFour
+import com.ls.MapReduceJobs.LogFileStatsFour.{FourthMapper, FourthReducer}
+import com.ls.MapReduceJobs.LogFileStatsOne.{FirstMapper, FirstReducer}
+import com.ls.MapReduceJobs.LogFileStatsThree.{ThirdMapper, ThirdReducer}
+import com.ls.MapReduceJobs.LogFileStatsTwo.{SecondJobMapper, SecondJobReducer, SecondMapper, SecondReducer}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.io.{IntWritable, Text}
@@ -18,7 +22,7 @@ class Main
 object Main{
 
   def main(args: Array[String]): Unit = {
-    
+
     //Input for which Job to run
     val programOption = args(2).toInt
     val configuration = new Configuration

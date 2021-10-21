@@ -1,16 +1,16 @@
-package com.ls
+package com.ls.MapReduceJobs
 
-import java.lang.Iterable
-import java.util.StringTokenizer
-
+import com.ls.HelperUtils.Parameters
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.io.{IntWritable, Text}
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
 import org.apache.hadoop.mapreduce.{Job, Mapper, Reducer}
+
+import java.lang.Iterable
+import java.util.StringTokenizer
 import scala.collection.JavaConverters.*
-import com.ls.HelperUtils.Parameters
 
 class LogFileStatsFour
 
